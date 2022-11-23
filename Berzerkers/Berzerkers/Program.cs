@@ -50,6 +50,8 @@ namespace Berzekers
         private Race _race; // field
 
         // props and fields to set values 
+        private int _carryingCapacity = 100; //field
+        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } //prop
         public virtual Race Races { get => _race; set => _race = value; } //prop 
 
         private int _dmg = 5; // field
