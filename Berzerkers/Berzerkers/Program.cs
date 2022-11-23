@@ -156,8 +156,11 @@ abstract class Character // Unit Class named Character
 {
 
 
-    private Race _race; // field
-    public virtual Race Races { get => _race; set => _race = value; } //prop 
+    private Race _race;
+                        // props and fields to set values 
+        private int _carryingCapacity = 100; //field
+        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } //prop
+        public virtual Race Races { get => _race; set => _race = value; } //prop 
 
     // props and fields to set values 
     private int _dmg = 5; // field
