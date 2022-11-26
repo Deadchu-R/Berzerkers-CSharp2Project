@@ -11,18 +11,88 @@ internal class Program
     //List<Character> cUnits = new List<Character>();
     public static void Main(string[] args)
     {
-
+        
         TestingClass test = new TestingClass();
-        test.TestDice();
+       // test.TestDice();
+        GameManager gameManager = new GameManager();
+        gameManager.GameLoop();
+      //  gameManager.GameLoop();
+        
       // test.UnitTypesTest();
     }
 }
 
 namespace Berzekers
 {
-    public class GameManager
+    public class AttackDice
     {
+        public void Dices()
+        {
+            Dice attackDice1;
+            attackDice1 = new Dice();
+            attackDice1._die = 0;
+            attackDice1._scalar = 0;
+            attackDice1._mod = 0; // default value
 
+            Dice deffeceDice;
+            deffeceDice = new Dice();
+            deffeceDice._die = 0;
+            deffeceDice._scalar = 0;
+            deffeceDice._mod = 0; // default value
+        }
+    }
+
+    public class GameManager // where the game will run
+    {
+           public enum Weather { Sunny, Rainy, Snowy } 
+       public void GameLoop()
+        {
+          
+          
+            
+            
+            while (true)
+            {
+                int hp =-5;
+                Console.WriteLine("starting game...");
+                if (GameOver(hp))
+                {
+                 Console.WriteLine("closing game...");
+                  break;
+                }
+            }
+    }
+        public void Units()
+        {
+            NaziMeleeUnit NaziMelee = new NaziMeleeUnit(Character.Race.Nazis);
+            SlavMeleeUnit SlavMelee = new SlavMeleeUnit(Character.Race.Slavs);
+            PersianMeleeUnit PersianMelee = new PersianMeleeUnit(Character.Race.Persians);
+            ChonkerUnit NaziChonker = new NaziChonkerUnit(Character.Race.Nazis);
+            ChonkerUnit SlavChonker = new SlavChonkerUnit(Character.Race.Slavs);
+            ChonkerUnit PersianChonker = new PersianChonkerUnit(Character.Race.Persians);
+            RangedUnit NaziRanged = new NaziRangedUnit(Character.Race.Nazis);
+            RangedUnit SlavRanged = new SlavRangedUnit(Character.Race.Slavs);
+            RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
+
+            List<Character> cUnits = new List<Character>();
+            cUnits.Add(new NaziMeleeUnit(Character.Race.Nazis));
+            cUnits.Add(new SlavMeleeUnit(Character.Race.Slavs));
+            cUnits.Add(new PersianMeleeUnit(Character.Race.Persians));
+
+
+
+        }
+        public void Dices()
+        {
+       
+            
+
+        }
+            public bool GameOver(int HP)
+            {
+             Console.WriteLine("GameOver");
+              return HP <= 0;
+            }
     }
 
     public class TestingClass
@@ -162,7 +232,8 @@ abstract class Character // Unit Class named Character
         public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } //prop
         public virtual Race Races { get => _race; set => _race = value; } //prop 
 
-    // props and fields to set values 
+        // props and fields to set values 
+        Dice dmgDice;
     private int _dmg = 5; // field
     public virtual int DMG { get => _dmg; protected set => _dmg = value; } // prop
 
