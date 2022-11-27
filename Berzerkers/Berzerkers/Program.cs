@@ -212,11 +212,7 @@ namespace Berzekers
     abstract class Character  // Unit Class named Character
     {
 
-
         public enum Weather { Sunny, Rainy, Snowy }
-
-
-
 
         private Race _race;
         // props and fields to set values 
@@ -297,7 +293,7 @@ namespace Berzekers
         public virtual void Defend(Character attacker, Dice[] multipleDice)
         {
 
-
+            // base.die
             //int hitChance = multipleDice[0].roll();
             //Console.WriteLine($"hit chance is: {hitChance}");
             //int defenderChance = multipleDice[1].roll();
