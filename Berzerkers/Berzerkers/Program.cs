@@ -6,6 +6,7 @@ using Berzekers;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Security;
 
 internal class Program
 {
@@ -18,7 +19,8 @@ internal class Program
         // test.TestDice();
 
         GameManager gameManager = new GameManager();
-        gameManager.GameLoop();
+        // gameManager.GameLoop();
+        gameManager.UnitsCombat();
 
 
         // test.UnitTypesTest();
@@ -169,10 +171,10 @@ namespace Berzekers
             {
                 cubeNam++;
                 int cubeVal = rnd.Next(1, (int)die + 1);
-                //if (i == 0) Console.WriteLine($"1st Dice Value:{cubeVal}");
-                //if (i == 1) Console.WriteLine($"2nd Dice Value:{cubeVal}");
-                //if (i == 2) Console.WriteLine($"3rd Dice Value:{cubeVal}");
-                //if (i >= 3) Console.WriteLine($"{cubeNam}th Dice Value: {cubeVal} ");
+                if (i == 0) Console.WriteLine($"1st Dice Value:{cubeVal}");
+                if (i == 1) Console.WriteLine($"2nd Dice Value:{cubeVal}");
+                if (i == 2) Console.WriteLine($"3rd Dice Value:{cubeVal}");
+                if (i >= 3) Console.WriteLine($"{cubeNam}th Dice Value: {cubeVal} ");
                 if (i < scalar)
                 {
                     Console.WriteLine($"");
@@ -180,12 +182,13 @@ namespace Berzekers
                 value += cubeVal;
             }
             value += mod;
+            Console.WriteLine($"value is {value}");
             return value;
         }
 
         public override string ToString()
         {
-            return $"die type:{_die} sides, times to roll:{_scalar}, modifier{_mod} throwing dices....";
+            return $"die type:{_die}sides, times to roll:{_scalar}, modifier{_mod} throwing dices....";
           
         }
         public override bool Equals([NotNullWhen(true)] object? obj)
@@ -288,33 +291,26 @@ namespace Berzekers
            
         //}
         
-        public int CreateDice(string diceType)
-        {
-            if (diceType == "HitChance")
-            {
+        public int CreateHitChanceDice()
+        {  
              Dice hitChanceDice;
              hitChanceDice = new Dice(6, 2, HitChanceMod);
-             int hitChance = hitChanceDice.roll();
-             return hitChance;
-            }
-            if (diceType == "DefenderDice")
-            {
-             Dice defenderChanceDice;
-             defenderChanceDice = new Dice(6, 2, DefenceChanceMod);
-             int defenderChance = defenderChanceDice.roll();
-             return defenderChance;
-            }
-            else if (diceType == "DamageDice")
-            {
-                Dice damageDice;
-              damageDice = new Dice(6, 2, DamageMod);
-              int damage = damageDice.roll();
-                return damage;
-            }
-            else
-            {
-                return 0;
-            }
+             int hitChance = hitChanceDice.roll();   
+             return hitChance; 
+        }
+        public int CreateDefendChanceDice()
+        {
+            Dice defendChanceDice;
+            defendChanceDice = new Dice(6, 2, HitChanceMod);
+            int defendChance = defendChanceDice.roll();
+            return defendChance;
+        }
+        public int CreateDamageDice()
+        {
+            Dice damageChanceDice;
+            damageChanceDice = new Dice(6, 2, HitChanceMod);
+            int damage = damageChanceDice.roll();
+            return damage;
         }
         public virtual void Attack(Character defender)
         {
@@ -325,9 +321,14 @@ namespace Berzekers
         public virtual void Defend(Character attacker)
         {
 
-          int hitChance =  CreateDice("HitChanceDice");
-          int defenderChance = CreateDice("DefnderChanceDice");
-          int damage = CreateDice("DamageDice");
+
+
+            int hitChance =  CreateHitChanceDice();     
+            int defenderChance = CreateDefendChanceDice();
+     
+            int damage = CreateDamageDice();
+            Console.WriteLine("");
+            Console.WriteLine("damage chance is active");
 
             if (hitChance > defenderChance)
             {
@@ -363,9 +364,11 @@ namespace Berzekers
         public override void Defend(Character attacker)
         {
 
-            int hitChance = CreateDice("HitChanceDice");
-            int defenderChance = CreateDice("DefnderChanceDice");
-            int damage = CreateDice("DamageDice");
+            int hitChance = CreateHitChanceDice();
+            int defenderChance = CreateDefendChanceDice();
+            int damage = CreateDamageDice();
+            
+
 
             if (damage * MeleeMulti <= DefVal)
             {
@@ -386,10 +389,12 @@ namespace Berzekers
 
         public override void Defend(Character attacker)
         {
-            int hitChance = CreateDice("HitChanceDice");
-            int defenderChance = CreateDice("DefnderChanceDice");
-            int damage = CreateDice("DamageDice");
-;
+            Console.WriteLine("hitDice throw");
+            int hitChance = CreateHitChanceDice();
+            Console.WriteLine("DefendDice throw");
+            int defenderChance = this.CreateDefendChanceDice();
+            int damage = CreateDamageDice();
+            
             
 
             if (damage <= DefVal * DefMulti)
