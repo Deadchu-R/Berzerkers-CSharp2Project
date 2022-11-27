@@ -46,3 +46,6 @@ C:\Users\roeet\OneDrive\Desktop\לימודים\יוניטי\Berzerkers-CSharp2Pr
 C:\Users\roeet\OneDrive\Desktop\לימודים\יוניטי\Berzerkers-CSharp2Project\Berzerkers\Berzerkers\obj\Debug\net6.0\Berzerkers.pdb
 C:\Users\roeet\OneDrive\Desktop\לימודים\יוניטי\Berzerkers-CSharp2Project\Berzerkers\Berzerkers\obj\Debug\net6.0\Berzerkers.genruntimeconfig.cache
 C:\Users\roeet\OneDrive\Desktop\לימודים\יוניטי\Berzerkers-CSharp2Project\Berzerkers\Berzerkers\obj\Debug\net6.0\ref\Berzerkers.dll
+C:\Users\roee\source\repos\BerzerkersOutSide\Berzerkers\Berzerkers\obj\Debug\net6.0\Berzerkers.csproj.SuggestedBindingRedirects.cache
+C:\Users\roee\source\repos\BerzerkersOutSide\Berzerkers\Berzerkers\obj\Debug\net6.0\Berzerkers.dll.config
+C:\Users\roee\source\repos\BerzerkersOutSide\Berzerkers\Berzerkers\bin\Debug\net6.0\Berzerkers.dll.config
