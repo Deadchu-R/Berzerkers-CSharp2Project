@@ -11,11 +11,7 @@ internal class Program
     //List<Character> cUnits = new List<Character>();
     public static void Main(string[] args)
     {
-        Dice attackDice;
-        attackDice = new Dice();
-        attackDice._die = 0;
-        attackDice._scalar = 0;
-        attackDice._mod = 0;
+
 
         TestingClass test = new TestingClass();
         // test.TestDice();
@@ -36,9 +32,8 @@ namespace Berzekers
     {
 
 
-        
-        // public enum DiceTypes { AttackDice, DeffenceDice, DamageDice }
 
+        //public enum DiceTypes { AttackDice, DeffenceDice, DamageDice }
         //Dice DiceType(DiceTypes type, int mod)
         //{
 
@@ -48,7 +43,7 @@ namespace Berzekers
         //        attackDice = new Dice();
         //        attackDice._die = 0;
         //        attackDice._scalar = 0;
-        //        attackDice._mod = mod; 
+        //        attackDice._mod = mod;
         //        return attackDice;
         //    }
         //    if (type == DiceTypes.DeffenceDice)
@@ -57,7 +52,7 @@ namespace Berzekers
         //        deffeceDice = new Dice();
         //        deffeceDice._die = 0;
         //        deffeceDice._scalar = 7;
-        //        deffeceDice._mod = mod; 
+        //        deffeceDice._mod = mod;
         //        return deffeceDice;
         //    }
         //    if (type == DiceTypes.DamageDice)
@@ -98,9 +93,56 @@ namespace Berzekers
                     break;
                 }
             }
+            UnitsCombat();
+
 
         }
-        public void Units()
+        public void UnitsCombat() // a method for Units Combat Algo
+        {
+            Units();
+            List<Character> unitTeam1 = new List<Character>();
+            unitTeam1.Add(new NaziMeleeUnit(Character.Race.Nazis));
+            unitTeam1.Add(new SlavChonkerUnit(Character.Race.Slavs));
+            unitTeam1.Add(new PersianRangedUnit(Character.Race.Persians));
+            int team1Count = unitTeam1.Count;
+
+            List<Character> unitTeam2 = new List<Character>();
+            unitTeam2.Add(new NaziChonkerUnit(Character.Race.Nazis));
+            unitTeam2.Add(new SlavRangedUnit(Character.Race.Slavs));
+            unitTeam2.Add(new PersianMeleeUnit(Character.Race.Persians));
+            int team2Count = unitTeam2.Count;
+
+            bool team1Turn = true;
+            if (team1Turn == true)
+            {
+                Console.WriteLine("-----------------");
+                Console.WriteLine("it is Team1 Turn:");
+                Console.WriteLine("-----------------");
+                Random rndAttacker = new Random();
+                int randomAttacker = rndAttacker.Next(0, team1Count);
+                Random rndDefender = new Random();
+                int randomDefender = rndAttacker.Next(0, team2Count);
+                Console.WriteLine($"Team1: {unitTeam1[randomAttacker].Name} is attacking Team2:{unitTeam2[randomDefender].Name} ");
+                unitTeam1[randomAttacker].Attack(unitTeam2[randomDefender]);
+                team1Turn = false;
+            }
+            if (team1Turn == false)
+            {
+                Console.WriteLine("-----------------");
+                Console.WriteLine("it is Team2 Turn:");
+                Console.WriteLine("-----------------");
+                Random rndAttacker = new Random();
+                int randomAttacker = rndAttacker.Next(0, team2Count);
+                Random rndDefender = new Random();
+                int randomDefender = rndAttacker.Next(0, team1Count);
+                Console.WriteLine($"Team2: {unitTeam2[randomAttacker].Name} is attacking Team1:{unitTeam1[randomDefender].Name} ");
+                unitTeam2[randomAttacker].Attack(unitTeam1[randomDefender]);
+
+
+                team1Turn = true;
+            }
+        }
+        public void Units() // method to instanciate unit types
         {
             NaziMeleeUnit NaziMelee = new NaziMeleeUnit(Character.Race.Nazis);
             SlavMeleeUnit SlavMelee = new SlavMeleeUnit(Character.Race.Slavs);
@@ -111,15 +153,8 @@ namespace Berzekers
             RangedUnit NaziRanged = new NaziRangedUnit(Character.Race.Nazis);
             RangedUnit SlavRanged = new SlavRangedUnit(Character.Race.Slavs);
             RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
-
-            List<Character> cUnits = new List<Character>();
-            cUnits.Add(new NaziMeleeUnit(Character.Race.Nazis));
-            cUnits.Add(new SlavMeleeUnit(Character.Race.Slavs));
-            cUnits.Add(new PersianMeleeUnit(Character.Race.Persians));
-
-
-
         }
+
         public bool GameOver(int HP)
         {
             Console.WriteLine("GameOver");
@@ -207,18 +242,13 @@ namespace Berzekers
             {
                 cubeNam++;
                 int cubeVal = rnd.Next(1, (int)die + 1);
-                // Console.WriteLine($"cubenam is {cubeNam}");
-                // string cubeValAnnouncer  = (i == 1) ? $"1st Cube Value:{cubeVal}" (i == 2) ?  ;
-                // Console.WriteLine(cubeValAnnouncer);
-                if (i == 0) Console.WriteLine($"1st Cube Value:{cubeVal}");
-                if (i == 1) Console.WriteLine($"2nd Cube Value:{cubeVal}");
-                if (i == 2) Console.WriteLine($"3rd Cube Value:{cubeVal}");
-                if (i >= 3) Console.WriteLine($"{cubeNam}th Cube Value: {cubeVal} ");
-                //Console.WriteLine($"Cube {cubeNam} Value:{cubeVal}");
+                //if (i == 0) Console.WriteLine($"1st Dice Value:{cubeVal}");
+                //if (i == 1) Console.WriteLine($"2nd Dice Value:{cubeVal}");
+                //if (i == 2) Console.WriteLine($"3rd Dice Value:{cubeVal}");
+                //if (i >= 3) Console.WriteLine($"{cubeNam}th Dice Value: {cubeVal} ");
                 if (i < scalar)
                 {
                     Console.WriteLine($"");
-
                 }
                 value += cubeVal;
             }
@@ -228,7 +258,8 @@ namespace Berzekers
 
         public override string ToString()
         {
-            return $"(dices:{_die},times to roll:{_scalar}, modifier{_mod})";
+            return $"die type:{_die} sides, times to roll:{_scalar}, modifier{_mod} throwing dices....";
+          
         }
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
@@ -265,6 +296,9 @@ namespace Berzekers
 
         private Race _race;
         // props and fields to set values 
+        private string _name = "John Doe"; //field
+        public virtual string Name { get => _name; protected set => _name = value; } //prop
+
         private int _carryingCapacity = 100; //field
         public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } //prop
 
@@ -278,35 +312,27 @@ namespace Berzekers
         public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; } //prop
         public virtual Race Races { get => _race; set => _race = value; } //prop 
 
-        private int _hp = 100; // field
+        private int _hp = 10; // field
         public virtual int HP { get => _hp; protected set => _hp = value; } // prop
 
         private int _defVal = 2; // field
         public virtual int DefVal { get => _defVal; protected set => _defVal = value; } //prop
 
-        // at first i wanted to have a shortcut with the constructor
-        //public Character(Race race)
-        //{
-        //    Races = race;
-
-        //    if (race == Race.Nazis)
-        //    {
-        //        this.DMG++;
-        //    }
-        //    if (race == Race.Slavs)
-        //    {
-        //        this.HP++;
-        //    }
-        //    if (race == Race.Persians)
-        //    {
-        //        this.DefVal++;
-        //    }
-        //} 
-        // at first i wanted to have a shortcut with the constructor
-
-        public virtual void WeatherEffects()
+        public void WeatherEffects(Weather weatherType)
         {
-
+            if (weatherType == Weather.Sunny)
+            {
+                HitChanceMod++;
+            }
+            if (weatherType == Weather.Rainy)
+            {
+                DamageMod--;
+                HitChanceMod++;
+            }
+            if (weatherType == Weather.Snowy)
+            {
+                HitChanceMod--;
+            }
         }
 
         public virtual void Attack(Character defender)
@@ -327,21 +353,28 @@ namespace Berzekers
         }
         public virtual void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
         {
+
             Dice defenderChanceDice;
             defenderChanceDice = new Dice();
             defenderChanceDice._die = 6;
             defenderChanceDice._scalar = 2;
             defenderChanceDice._mod = DefenceChanceMod;
-            int DMG = damageDice.roll();
-
-            if (hitChanceDice.roll() > defenderChanceDice.roll())
+            int hitChance = hitChanceDice.roll();
+            Console.WriteLine($"hit chance is: {hitChance}");
+            int defenderChance = defenderChanceDice.roll();
+            Console.WriteLine($"defender chance is: {defenderChance}");
+            if (hitChance > defenderChance)
             {
-           
+                Console.WriteLine($"hit is succesful");
+                int DMG = damageDice.roll();
+                Console.WriteLine($"damage is: {DMG} DefenceValue is:{DefVal}");
+
                 if (DMG <= DefVal)
                 {
                     return;
                 }
                 HP -= (DMG - DefVal);
+                Console.WriteLine($"{this.Name} HP is now: {this.HP}");
 
             }
         }
@@ -362,16 +395,25 @@ namespace Berzekers
 
         public virtual int MeleeMulti { get => _meleeMulti; protected set => _meleeMulti = value; }
 
-        public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        {
-            int DMG = damageDice.roll();
+        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
+        //{
+        //    Dice defenderChanceDice;
+        //    defenderChanceDice = new Dice();
+        //    defenderChanceDice._die = 6;
+        //    defenderChanceDice._scalar = 2;
+        //    defenderChanceDice._mod = DefenceChanceMod;
+        //    int hitChance = hitChanceDice.roll();
+        //    Console.WriteLine($"hit chance is: {hitChance}");
+        //    int defenderChance = defenderChanceDice.roll();
+        //    Console.WriteLine($"defender chance is: {defenderChance}");
+        //    int DMG = damageDice.roll();
 
-            if (DMG * MeleeMulti <= DefVal)
-            {
-                return;
-            }
-            HP -= ((DMG * MeleeMulti) - DefVal);
-        }
+        //    if (DMG * MeleeMulti <= DefVal)
+        //    {
+        //        return;
+        //    }
+        //    HP -= ((DMG * MeleeMulti) - DefVal);
+        //}
     }
     internal abstract class ChonkerUnit : Character // can defend by a multiplier
     {
@@ -383,16 +425,25 @@ namespace Berzekers
 
         public virtual int DefMulti { get => _defMulti; protected set => _defMulti = value; }
 
-        public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        {
-            int DMG = damageDice.roll();
+        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
+        //{
+        //    Dice defenderChanceDice;
+        //    defenderChanceDice = new Dice();
+        //    defenderChanceDice._die = 6;
+        //    defenderChanceDice._scalar = 2;
+        //    defenderChanceDice._mod = DefenceChanceMod;
+        //    int hitChance = hitChanceDice.roll();
+        //    Console.WriteLine($"hit chance is: {hitChance}");
+        //    int defenderChance = defenderChanceDice.roll();
+        //    Console.WriteLine($"defender chance is: {defenderChance}");
+        //    int DMG = damageDice.roll();
 
-            if (DMG <= DefVal * DefMulti)
-            {
-                return;
-            }
-            HP -= (DMG - (DefVal * DefMulti));
-        }
+        //    if (DMG <= DefVal * DefMulti)
+        //    {
+        //        return;
+        //    }
+        //    HP -= (DMG - (DefVal * DefMulti));
+        //}
 
     }
     internal abstract class RangedUnit : Character // can attack more then once according to how much proj they have
@@ -406,20 +457,30 @@ namespace Berzekers
 
         public virtual int ProjCount { get => _projCount; protected set => _projCount = value; }
 
-        public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        {
-            while (ProjCount > 0)
-            {
-                int DMG = damageDice.roll();
+        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
+        //{
 
-                if (DMG <= DefVal)
-                {
-                    return;
-                }
-                HP -= (DMG - DefVal);
-                ProjCount--;
-            }
-        }
+        //    Dice defenderChanceDice;
+        //    defenderChanceDice = new Dice();
+        //    defenderChanceDice._die = 6;
+        //    defenderChanceDice._scalar = 2;
+        //    defenderChanceDice._mod = DefenceChanceMod;
+        //    int hitChance = hitChanceDice.roll();
+        //    Console.WriteLine($"hit chance is: {hitChance}");
+        //    int defenderChance = defenderChanceDice.roll();
+        //    Console.WriteLine($"defender chance is: {defenderChance}");
+        //    while (ProjCount > 0)
+        //    {
+        //        int DMG = damageDice.roll();
+
+        //        if (DMG <= DefVal)
+        //        {
+        //            return;
+        //        }
+        //        HP -= (DMG - DefVal);
+        //        ProjCount--;
+        //    }
+        //}
     }
 
     internal class NaziMeleeUnit : MeleeUnit
@@ -430,8 +491,8 @@ namespace Berzekers
             race = Race.Nazis;
             DamageMod++;
         }
-        //hello berzerkers
 
+        public override string Name { get => "NaziMeleeUnit"; protected set => base.Name = value; }
         public override int MeleeMulti { get => base.MeleeMulti + 3; protected set => base.MeleeMulti = value; }
     }
     internal class NaziChonkerUnit : ChonkerUnit
@@ -441,6 +502,7 @@ namespace Berzekers
             race = Race.Nazis;
             DamageMod++;
         }
+        public override string Name { get => "NaziChonkerUnit"; protected set => base.Name = value; }
         public override int DefMulti { get => base.DefMulti + 1; protected set => base.DefMulti = value; }
     }
     internal class NaziRangedUnit : RangedUnit
@@ -450,6 +512,7 @@ namespace Berzekers
             race = Race.Nazis;
             DamageMod++;
         }
+        public override string Name { get => "NaziRangedUnit"; protected set => base.Name = value; }
         public override int ProjCount { get => base.ProjCount + 4; protected set => base.ProjCount = value; }
     }
     internal class SlavMeleeUnit : MeleeUnit
@@ -459,6 +522,7 @@ namespace Berzekers
             race = Race.Slavs;
             HP++;
         }
+        public override string Name { get => "SlavMeleeUnit"; protected set => base.Name = value; }
         public override int MeleeMulti { get => base.MeleeMulti + 5; protected set => base.MeleeMulti = value; }
     }
     internal class SlavChonkerUnit : ChonkerUnit
@@ -468,6 +532,7 @@ namespace Berzekers
             race = Race.Nazis;
             HP++;
         }
+        public override string Name { get => "SlavChonkerUnit"; protected set => base.Name = value; }
         public override int DefMulti { get => base.DefMulti + 2; protected set => base.DefMulti = value; }
     }
     internal class SlavRangedUnit : RangedUnit
@@ -477,10 +542,12 @@ namespace Berzekers
             race = Race.Nazis;
             HP++;
         }
+        public override string Name { get => "SlavRangedUnit"; protected set => base.Name = value; }
         public override int ProjCount { get => base.ProjCount - 1; protected set => base.ProjCount = value; }
     }
     internal class PersianMeleeUnit : MeleeUnit
     {
+        public override string Name { get => "PersianMeleeUnit"; protected set => base.Name = value; }
         public PersianMeleeUnit(Race race) : base(race)
         {
             race = Race.Persians;
@@ -490,6 +557,7 @@ namespace Berzekers
     }
     internal class PersianChonkerUnit : ChonkerUnit
     {
+        public override string Name { get => "PersianChonkerUnit"; protected set => base.Name = value; }
         public PersianChonkerUnit(Race race) : base(race)
         {
             race = Race.Persians;
@@ -504,6 +572,7 @@ namespace Berzekers
             race = Race.Persians;
             DefVal++;
         }
+        public override string Name { get => "PersianRangedUnit"; protected set => base.Name = value; }
         public override int ProjCount { get => base.ProjCount + 1; protected set => base.ProjCount = value; }
     }
 
