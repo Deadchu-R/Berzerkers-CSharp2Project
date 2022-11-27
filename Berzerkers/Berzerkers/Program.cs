@@ -3,6 +3,7 @@
 // -----------------------------
 
 using Berzekers;
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -31,57 +32,8 @@ namespace Berzekers
     public class GameManager // where the game will run
     {
 
-
-
-        //public enum DiceTypes { AttackDice, DeffenceDice, DamageDice }
-        //Dice DiceType(DiceTypes type, int mod)
-        //{
-
-        //    if (type == DiceTypes.AttackDice)
-        //    {
-        //        Dice attackDice;
-        //        attackDice = new Dice();
-        //        attackDice._die = 0;
-        //        attackDice._scalar = 0;
-        //        attackDice._mod = mod;
-        //        return attackDice;
-        //    }
-        //    if (type == DiceTypes.DeffenceDice)
-        //    {
-        //        Dice deffeceDice;
-        //        deffeceDice = new Dice();
-        //        deffeceDice._die = 0;
-        //        deffeceDice._scalar = 7;
-        //        deffeceDice._mod = mod;
-        //        return deffeceDice;
-        //    }
-        //    if (type == DiceTypes.DamageDice)
-        //    {
-        //        Dice damageDice;
-        //        damageDice = new Dice();
-        //        damageDice._die = 0;
-        //        damageDice._scalar = 7;
-        //        damageDice._mod = mod;
-        //        return damageDice;
-        //    }
-
-        //    else
-        //    {
-        //        Dice defaultDice;
-        //        defaultDice = new Dice();
-        //        defaultDice._die = 0;
-        //        defaultDice._scalar = 0;
-        //        defaultDice._mod = mod;
-        //        return defaultDice;
-        //    }
-        //}
         public void GameLoop()
         {
-
-
-            //Dice defDice = DiceType(DiceTypes.DeffenceDice, 1);
-            //Console.WriteLine(defDice._mod);
-
 
             while (true)
             {
@@ -94,7 +46,6 @@ namespace Berzekers
                 }
             }
             UnitsCombat();
-
 
         }
         public void UnitsCombat() // a method for Units Combat Algo
@@ -110,6 +61,7 @@ namespace Berzekers
             unitTeam2.Add(new NaziChonkerUnit(Character.Race.Nazis));
             unitTeam2.Add(new SlavRangedUnit(Character.Race.Slavs));
             unitTeam2.Add(new PersianMeleeUnit(Character.Race.Persians));
+            //Console.WriteLine($"{PersianRangedUnit}  HP:{PersianRangedUnit.HP} DeffenceValue:{PersianRangedUnit.DefVal} DeffenceMulti:{PersianRangedUnit.DefMulti}");
             int team2Count = unitTeam2.Count;
 
             bool team1Turn = true;
@@ -164,31 +116,6 @@ namespace Berzekers
 
     public class TestingClass
     {
-        public void UnitTypesTest()
-        {
-            NaziMeleeUnit NaziMelee = new NaziMeleeUnit(Character.Race.Nazis);
-            SlavMeleeUnit SlavMelee = new SlavMeleeUnit(Character.Race.Slavs);
-            PersianMeleeUnit PersianMelee = new PersianMeleeUnit(Character.Race.Persians);
-            ChonkerUnit NaziChonker = new NaziChonkerUnit(Character.Race.Nazis);
-            ChonkerUnit SlavChonker = new SlavChonkerUnit(Character.Race.Slavs);
-            ChonkerUnit PersianChonker = new PersianChonkerUnit(Character.Race.Persians);
-            RangedUnit NaziRanged = new NaziRangedUnit(Character.Race.Nazis);
-            RangedUnit SlavRanged = new SlavRangedUnit(Character.Race.Slavs);
-            RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
-
-            List<Character> cUnits = new List<Character>();
-            cUnits.Add(new NaziMeleeUnit(Character.Race.Nazis));
-            cUnits.Add(new SlavMeleeUnit(Character.Race.Slavs));
-            cUnits.Add(new PersianMeleeUnit(Character.Race.Persians));
-
-            Console.WriteLine(cUnits[1]); // testing the list
-            Console.WriteLine($"{NaziMelee}  HP:{NaziMelee.HP} DeffenceValue:{NaziMelee.DefVal} MeleeMulti:{NaziMelee.MeleeMulti}");
-            Console.WriteLine($"{SlavMelee}  HP:{SlavMelee.HP} DeffenceValue:{SlavMelee.DefVal} MeleeMulti:{SlavMelee.MeleeMulti}");
-            Console.WriteLine($"{PersianMelee}  HP:{PersianMelee.HP} DeffenceValue:{PersianMelee.DefVal} MeleeMulti:{PersianMelee.MeleeMulti}");
-            Console.WriteLine($"{NaziChonker}  HP:{NaziChonker.HP} DeffenceValue:{NaziChonker.DefVal} DeffenceMulti:{NaziChonker.DefMulti}");
-            Console.WriteLine($"{SlavChonker}  HP:{SlavChonker.HP} DeffenceValue:{SlavChonker.DefVal} DeffenceMulti:{SlavChonker.DefMulti} ");
-            Console.WriteLine($"{PersianChonker}  HP:{PersianChonker.HP} DeffenceValue:{PersianChonker.DefVal} DeffenceMulti:{PersianChonker.DefMulti}");
-        }
         public void TestDice()
         {
             Dice dice1;
@@ -266,10 +193,7 @@ namespace Berzekers
 
             if (obj is Dice diceObj) // casting obj as dice
             {
-                //  if (diceObj._die == this._die && diceObj._scalar == this._scalar && diceObj._mod == this._mod)
-                //   {
-                //      return true;
-                //  
+
                 return this.GetHashCode() == diceObj.GetHashCode();
             }
             return false;
@@ -296,27 +220,26 @@ namespace Berzekers
 
         private Race _race;
         // props and fields to set values 
-        private string _name = "John Doe"; //field
-        public virtual string Name { get => _name; protected set => _name = value; } //prop
+        private string _name = "John Doe"; 
+        public virtual string Name { get => _name; protected set => _name = value; } 
 
-        private int _carryingCapacity = 100; //field
-        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } //prop
+        private int _carryingCapacity = 100; 
+        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } 
+        private int _damageMod = 0; 
+        public virtual int DamageMod { get => _damageMod; protected set => _damageMod = value; } 
 
-        private int _damageMod = 0; //field
-        public virtual int DamageMod { get => _damageMod; protected set => _damageMod = value; } //prop
+        private int _hitChanceMod = 0; 
+        public virtual int HitChanceMod { get => _hitChanceMod; protected set => _hitChanceMod = value; } 
 
-        private int _hitChanceMod = 0; //field
-        public virtual int HitChanceMod { get => _hitChanceMod; protected set => _hitChanceMod = value; } //prop
+        private int _defenceChanceMod = 0; 
+        public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; } 
+        public virtual Race Races { get => _race; set => _race = value; } 
 
-        private int _defenceChanceMod = 0; //field
-        public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; } //prop
-        public virtual Race Races { get => _race; set => _race = value; } //prop 
+        private int _hp = 10; 
+        public virtual int HP { get => _hp; protected set => _hp = value; } 
 
-        private int _hp = 10; // field
-        public virtual int HP { get => _hp; protected set => _hp = value; } // prop
-
-        private int _defVal = 2; // field
-        public virtual int DefVal { get => _defVal; protected set => _defVal = value; } //prop
+        private int _defVal = 2; 
+        public virtual int DefVal { get => _defVal; protected set => _defVal = value; } 
 
         public void WeatherEffects(Weather weatherType)
         {
@@ -334,46 +257,63 @@ namespace Berzekers
                 HitChanceMod--;
             }
         }
-
-        public virtual void Attack(Character defender)
+        public Dictionary<Dice, string> MultipleDice()
         {
             Dice hitChanceDice;
-            hitChanceDice = new Dice();
-            hitChanceDice._die = 6;
-            hitChanceDice._scalar = 2;
-            hitChanceDice._mod = HitChanceMod;
-
+            hitChanceDice = new Dice(6,2,HitChanceMod);
+            Dice defenderChanceDice;
+            defenderChanceDice = new Dice(6,2,DefenceChanceMod);
             Dice damageDice;
-            damageDice = new Dice();
-            damageDice._die = 6;
-            damageDice._scalar = 2;
-            damageDice._mod = DamageMod;
-
-            defender.Defend(this, hitChanceDice, damageDice);
+            damageDice = new Dice(6,2,DamageMod);
+           // Dice[] multipleDice = { hitChanceDice, defenderChanceDice, damageDice };
+            //var multipleDiceDicionary = Enumerable.Range(0, multipleDice.Length).ToDictionary(x => multipleDice[x]);
+           var multipleDice = new Dictionary<Dice, string>();
+            multipleDice.Add(hitChanceDice, "hitChanceDice");
+            multipleDice.Add(defenderChanceDice, "defenderChanceDice");
+            multipleDice.Add(damageDice, "damageDice");
+            return multipleDice; 
         }
-        public virtual void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
+        public int[] DiceRollValues(Dictionary<Dice, int> multipleDice)
+        {
+            MultipleDice();
+            int hitChance = multipleDice[0]
+            int hitChance = multipleDice[0].roll();
+            Console.WriteLine($"hit chance is: {hitChance}");
+            int defenderChance = multipleDice[1].roll();
+            Console.WriteLine($"defender chance is: {defenderChance}");
+            int DMG = multipleDice[2].roll();
+
+            int[] diceRollValues = { hitChance, defenderChance, DMG };
+            return diceRollValues;
+           
+        }
+        
+        public virtual void Attack(Character defender)
+        {
+            Dice[] multipleDice = MultipleDice();
+            
+            defender.Defend(this, multipleDice);
+        }
+        public virtual void Defend(Character attacker, Dice[] multipleDice)
         {
 
-            Dice defenderChanceDice;
-            defenderChanceDice = new Dice();
-            defenderChanceDice._die = 6;
-            defenderChanceDice._scalar = 2;
-            defenderChanceDice._mod = DefenceChanceMod;
-            int hitChance = hitChanceDice.roll();
-            Console.WriteLine($"hit chance is: {hitChance}");
-            int defenderChance = defenderChanceDice.roll();
-            Console.WriteLine($"defender chance is: {defenderChance}");
-            if (hitChance > defenderChance)
+
+            //int hitChance = multipleDice[0].roll();
+            //Console.WriteLine($"hit chance is: {hitChance}");
+            //int defenderChance = multipleDice[1].roll();
+            //Console.WriteLine($"defender chance is: {defenderChance}");
+            //int DMG = multipleDice[2].roll();
+           int[] diceRollValues = DiceRollValues(multipleDice);
+            if (diceRollValues[0] > diceRollValues[1])
             {
                 Console.WriteLine($"hit is succesful");
-                int DMG = damageDice.roll();
-                Console.WriteLine($"damage is: {DMG} DefenceValue is:{DefVal}");
+                Console.WriteLine($"damage is: {diceRollValues[2]} DefenceValue is:{DefVal}");
 
-                if (DMG <= DefVal)
+                if (diceRollValues[2] <= DefVal)
                 {
                     return;
                 }
-                HP -= (DMG - DefVal);
+                HP -= (diceRollValues[2] - DefVal);
                 Console.WriteLine($"{this.Name} HP is now: {this.HP}");
 
             }
@@ -395,25 +335,16 @@ namespace Berzekers
 
         public virtual int MeleeMulti { get => _meleeMulti; protected set => _meleeMulti = value; }
 
-        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        //{
-        //    Dice defenderChanceDice;
-        //    defenderChanceDice = new Dice();
-        //    defenderChanceDice._die = 6;
-        //    defenderChanceDice._scalar = 2;
-        //    defenderChanceDice._mod = DefenceChanceMod;
-        //    int hitChance = hitChanceDice.roll();
-        //    Console.WriteLine($"hit chance is: {hitChance}");
-        //    int defenderChance = defenderChanceDice.roll();
-        //    Console.WriteLine($"defender chance is: {defenderChance}");
-        //    int DMG = damageDice.roll();
+        public override void Defend(Character attacker, Dice[] multipleDice)
+        {
+     
 
-        //    if (DMG * MeleeMulti <= DefVal)
-        //    {
-        //        return;
-        //    }
-        //    HP -= ((DMG * MeleeMulti) - DefVal);
-        //}
+            if (DMG * MeleeMulti <= DefVal)
+            {
+                return;
+            }
+            HP -= ((DMG * MeleeMulti) - DefVal);
+        }
     }
     internal abstract class ChonkerUnit : Character // can defend by a multiplier
     {
@@ -425,37 +356,37 @@ namespace Berzekers
 
         public virtual int DefMulti { get => _defMulti; protected set => _defMulti = value; }
 
-        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        //{
-        //    Dice defenderChanceDice;
-        //    defenderChanceDice = new Dice();
-        //    defenderChanceDice._die = 6;
-        //    defenderChanceDice._scalar = 2;
-        //    defenderChanceDice._mod = DefenceChanceMod;
-        //    int hitChance = hitChanceDice.roll();
-        //    Console.WriteLine($"hit chance is: {hitChance}");
-        //    int defenderChance = defenderChanceDice.roll();
-        //    Console.WriteLine($"defender chance is: {defenderChance}");
-        //    int DMG = damageDice.roll();
+        public override void Defend(Character attacker, Dice hitchancedice, Dice damagedice)
+        {
+            Dice defenderchancedice;
+            defenderchancedice = new Dice();
+            defenderchancedice._die = 6;
+            defenderchancedice._scalar = 2;
+            defenderchancedice._mod = DefenceChanceMod;
+            int hitchance = hitchancedice.roll();
+            Console.WriteLine($"hit chance is: {hitchance}");
+            int defenderchance = defenderchancedice.roll();
+            Console.WriteLine($"defender chance is: {defenderchance}");
+            int dmg = damagedice.roll();
 
-        //    if (DMG <= DefVal * DefMulti)
-        //    {
-        //        return;
-        //    }
-        //    HP -= (DMG - (DefVal * DefMulti));
-        //}
+            if (dmg <= DefVal * DefMulti)
+            {
+                return;
+            }
+            HP -= (dmg - (DefVal * DefMulti));
+        }
 
     }
-    internal abstract class RangedUnit : Character // can attack more then once according to how much proj they have
+    internal abstract class RangedUnit : Character // can attack more then once according to how much projectiles they have
     {
 
-        private int _projCount = 2;
+        private int _projectileCount = 2;
 
         public RangedUnit(Race race)
         {
         }
 
-        public virtual int ProjCount { get => _projCount; protected set => _projCount = value; }
+        public virtual int ProjCount { get => _projectileCount; protected set => _projectileCount = value; }
 
         //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
         //{
