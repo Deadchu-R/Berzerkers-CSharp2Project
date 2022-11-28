@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\roeet\\.nuget\\packages\\": {}
+    "C:\\Users\\roee\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\roeet\\OneDrive\\Desktop\\לימודים\\יוניטי\\Berzerkers-CSharp2Project\\Berzerkers\\Berzerkers\\Berzerkers.csproj",
+      "projectUniqueName": "C:\\Users\\roee\\source\\repos\\BerzerkersOutSide\\Berzerkers\\Berzerkers\\Berzerkers.csproj",
       "projectName": "Berzerkers",
-      "projectPath": "C:\\Users\\roeet\\OneDrive\\Desktop\\לימודים\\יוניטי\\Berzerkers-CSharp2Project\\Berzerkers\\Berzerkers\\Berzerkers.csproj",
-      "packagesPath": "C:\\Users\\roeet\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\roeet\\OneDrive\\Desktop\\לימודים\\יוניטי\\Berzerkers-CSharp2Project\\Berzerkers\\Berzerkers\\obj\\",
+      "projectPath": "C:\\Users\\roee\\source\\repos\\BerzerkersOutSide\\Berzerkers\\Berzerkers\\Berzerkers.csproj",
+      "packagesPath": "C:\\Users\\roee\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\roee\\source\\repos\\BerzerkersOutSide\\Berzerkers\\Berzerkers\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\roeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\roee\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

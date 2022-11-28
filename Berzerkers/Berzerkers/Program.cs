@@ -7,25 +7,10 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Security;
-
-internal class Program
-{
-    //List<Character> cUnits = new List<Character>();
-    public static void Main(string[] args)
-    {
+using System.Security.Cryptography.X509Certificates;
+using static System.Net.Mime.MediaTypeNames;
 
 
-        TestingClass test = new TestingClass();
-        // test.TestDice();
-
-        GameManager gameManager = new GameManager();
-        // gameManager.GameLoop();
-        gameManager.UnitsCombat();
-
-
-        // test.UnitTypesTest();
-    }
-}
 
 namespace Berzekers
 {
@@ -33,23 +18,30 @@ namespace Berzekers
 
     public class GameManager // where the game will run
     {
-
+        public static void Main(string[] args)
+        {
+            GameManager gameManager = new GameManager();
+            // gameManager.GameLoop();
+            gameManager.UnitsCombat();
+        }
+        
         public void GameLoop()
         {
 
             while (true)
             {
-                int hp = -5;
+
                 Console.WriteLine("starting game...");
-                if (GameOver(hp))
-                {
-                    Console.WriteLine("closing game...");
-                    break;
-                }
+                UnitsCombat();
+                //if (TeamLost())
+                //{
+                //    Console.WriteLine("closing game...");
+                //    break;
+                //}
             }
-            UnitsCombat();
 
         }
+
         public void UnitsCombat() // a method for Units Combat Algo
         {
             Units();
@@ -57,43 +49,110 @@ namespace Berzekers
             unitTeam1.Add(new NaziMeleeUnit(Character.Race.Nazis));
             unitTeam1.Add(new SlavChonkerUnit(Character.Race.Slavs));
             unitTeam1.Add(new PersianRangedUnit(Character.Race.Persians));
-            int team1Count = unitTeam1.Count;
+          
 
             List<Character> unitTeam2 = new List<Character>();
             unitTeam2.Add(new NaziChonkerUnit(Character.Race.Nazis));
             unitTeam2.Add(new SlavRangedUnit(Character.Race.Slavs));
             unitTeam2.Add(new PersianMeleeUnit(Character.Race.Persians));
-            //Console.WriteLine($"{PersianRangedUnit}  HP:{PersianRangedUnit.HP} DeffenceValue:{PersianRangedUnit.DefVal} DeffenceMulti:{PersianRangedUnit.DefMulti}");
-            int team2Count = unitTeam2.Count;
-
-            bool team1Turn = true;
-            if (team1Turn == true)
+            
+            
+            int turns = 3;
+          
+            bool bothTeamsAlive = true;
+            while (bothTeamsAlive)
             {
-                Console.WriteLine("-----------------");
-                Console.WriteLine("it is Team1 Turn:");
-                Console.WriteLine("-----------------");
-                Random rndAttacker = new Random();
-                int randomAttacker = rndAttacker.Next(0, team1Count);
-                Random rndDefender = new Random();
-                int randomDefender = rndAttacker.Next(0, team2Count);
-                Console.WriteLine($"Team1: {unitTeam1[randomAttacker].Name} is attacking Team2:{unitTeam2[randomDefender].Name} ");
-                unitTeam1[randomAttacker].Attack(unitTeam2[randomDefender]);
-                team1Turn = false;
-            }
-            if (team1Turn == false)
-            {
-                Console.WriteLine("-----------------");
-                Console.WriteLine("it is Team2 Turn:");
-                Console.WriteLine("-----------------");
-                Random rndAttacker = new Random();
-                int randomAttacker = rndAttacker.Next(0, team2Count);
-                Random rndDefender = new Random();
-                int randomDefender = rndAttacker.Next(0, team1Count);
-                Console.WriteLine($"Team2: {unitTeam2[randomAttacker].Name} is attacking Team1:{unitTeam1[randomDefender].Name} ");
-                unitTeam2[randomAttacker].Attack(unitTeam1[randomDefender]);
+                Random randomWeatherTurns = new Random();     
+                int WeatherTurns = randomWeatherTurns.Next(1, turns);
+                if (turns / WeatherTurns == 1)
+                {
+                  Random randomWeatherNum = new Random();
+                  int WeatherNum = randomWeatherTurns.Next(0, 3);
+                }
 
 
-                team1Turn = true;
+                bool team1Turn = true;
+                if (team1Turn == true) // team1 turn
+                {
+                    Console.WriteLine("-----------------");
+                    Console.WriteLine("it is Team1 Turn:");
+                    Console.WriteLine("-----------------");
+                    Random rndAttacker = new Random();
+                    int randomAttacker = rndAttacker.Next(0, unitTeam1.Count);
+                    Random rndDefender = new Random();
+                    int randomDefender = rndAttacker.Next(0, unitTeam2.Count);
+                    Console.WriteLine($"Team1: {unitTeam1[randomAttacker].Name} is attacking Team2:{unitTeam2[randomDefender].Name} ");
+                    unitTeam1[randomAttacker].Attack(unitTeam2[randomDefender]);
+                    Console.WriteLine($"press anything to Finish Team1 Turn");
+                    Console.ReadLine();
+                    Console.Clear();
+                    if (unitTeam2[randomDefender].isDead())
+                    {
+                        Console.WriteLine($"UnitTeam2: {unitTeam2[randomDefender].Name} is dead");
+                        unitTeam2.Remove(unitTeam2[randomDefender]);
+                            
+                        if (unitTeam2.Count <= 0)
+                        {
+                            Console.WriteLine("team1 won");
+                            bothTeamsAlive = false;
+                            break;
+                        }
+                        for (int i = 0; i < unitTeam2.Count; i++)
+                        {
+                            Console.Write($"{unitTeam2[i].Name}is still alive. ");
+                        }
+                        turns++;
+                    }
+                    Console.WriteLine($"press anything to continue ");
+                    Console.ReadLine();
+                    Console.Clear();
+                    team1Turn = false;
+                }
+                if (team1Turn == false) // team 2 turn
+                {
+                    Console.WriteLine("-----------------");
+                    Console.WriteLine("it is Team2 Turn:");
+                    Console.WriteLine("-----------------");
+                    Random rndAttacker = new Random();
+                    int randomAttacker = rndAttacker.Next(0, unitTeam2.Count);
+                    Random rndDefender = new Random();
+                    int randomDefender = rndAttacker.Next(0, unitTeam1.Count);
+                   
+                    Console.WriteLine($"Team2: {unitTeam2[randomAttacker].Name} is attacking Team1:{unitTeam1[randomDefender].Name} ");
+                    unitTeam2[randomAttacker].Attack(unitTeam1[randomDefender]);
+                    Console.WriteLine($"press anything to Finish Team2 Turn");
+                    Console.ReadLine();
+                    Console.Clear();
+                    if (unitTeam2.Count > 0)
+                    {
+
+                        if (unitTeam1[randomDefender].isDead())
+                        {
+                            Console.WriteLine($"UnitTeam1: {unitTeam1[randomDefender].Name} is dead");
+                            unitTeam1.Remove(unitTeam1[randomDefender]);
+                           
+                            if (unitTeam1.Count <= 0)
+                            {
+                                Console.WriteLine("team2 won");
+                                bothTeamsAlive = false;
+                                break;
+                            }
+                            for (int i = 0; i < unitTeam1.Count; i++)
+                            {
+                             Console.Write(unitTeam1[i].Name);
+                            }
+                        }
+                        turns++;
+
+                    }
+                 
+                    Console.WriteLine($"press anything to continue ");
+                    Console.ReadLine();
+                    Console.Clear();
+                    team1Turn = false;
+
+                }
+
             }
         }
         public void Units() // method to instanciate unit types
@@ -109,42 +168,14 @@ namespace Berzekers
             RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
         }
 
-        public bool GameOver(int HP)
+        public bool TeamLost(int HP)
         {
             Console.WriteLine("GameOver");
             return HP <= 0;
         }
     }
 
-    public class TestingClass
-    {
-        public void TestDice()
-        {
-            Dice dice1;
-            Dice dice2;
-            dice1 = new Dice();
-            dice2 = new Dice();
-            dice2._die = 2;
-            dice2._scalar = 3;
-            dice2._mod = 2;
-            while (true)
-            {
-                dice1._die = 2;
-                dice1._scalar = 3;
-                dice1._mod = 2;
-                int value = dice1.roll();
-                Console.WriteLine(value);
-                if (value == dice1._die * dice1._scalar)
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine(value);
-                    Console.WriteLine("its the max value");
-                    break;
-                }
-            }
-            Console.WriteLine(dice1.Equals(dice2)); // testing of equals
-        } // for testing
-    }
+
     struct Dice
     {
         public uint _die; // how many dice
@@ -171,25 +202,27 @@ namespace Berzekers
             {
                 cubeNam++;
                 int cubeVal = rnd.Next(1, (int)die + 1);
-                if (i == 0) Console.WriteLine($"1st Dice Value:{cubeVal}");
-                if (i == 1) Console.WriteLine($"2nd Dice Value:{cubeVal}");
-                if (i == 2) Console.WriteLine($"3rd Dice Value:{cubeVal}");
-                if (i >= 3) Console.WriteLine($"{cubeNam}th Dice Value: {cubeVal} ");
-                if (i < scalar)
-                {
-                    Console.WriteLine($"");
-                }
+                if (i == 0) Console.Write($"1st Roll Value:{cubeVal}");
+                if (i == 1) Console.Write($",2nd Roll Value:{cubeVal}");
+                if (i == 2) Console.Write($",3rd Roll Value:{cubeVal}");
+                if (i >= 3) Console.Write($",{cubeNam}th Roll Value: {cubeVal} ");
+                //if (i < scalar)
+                //{
+                //    Console.WriteLine($"");
+                //}
                 value += cubeVal;
             }
-            value += mod;
-            Console.WriteLine($"value is {value}");
-            return value;
+            int moddedValue = value + mod;
+            Console.WriteLine("");
+            Console.WriteLine($"Value is:{moddedValue} = DiceValue:{value} + mod:{mod} ");
+            Console.WriteLine("");
+            return moddedValue;
         }
 
         public override string ToString()
         {
-            return $"die type:{_die}sides, times to roll:{_scalar}, modifier{_mod} throwing dices....";
-          
+            return $"die type:{_die}sides, times to roll:{_scalar}, modifier{_mod} ";
+
         }
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
@@ -216,133 +249,135 @@ namespace Berzekers
     {
 
         public enum Weather { Sunny, Rainy, Snowy }
-
+       
         private Race _race;
         // props and fields to set values 
-        private string _name = "John Doe"; 
-        public virtual string Name { get => _name; protected set => _name = value; } 
+        private string _name = "John Doe";
+        public virtual string Name { get => _name; protected set => _name = value; }
+        //private int _weatherNum = 0;
+        //public virtual int WeatherNum { get => _weatherNum; protected set => WeatherNum = value; }
+        private int _carryingCapacity = 100;
+        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; }
+        private int _damageMod = 0;
+        public virtual int DamageMod { get => _damageMod; protected set => _damageMod = value; }
 
-        private int _carryingCapacity = 100; 
-        public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; } 
-        private int _damageMod = 0; 
-        public virtual int DamageMod { get => _damageMod; protected set => _damageMod = value; } 
+        private int _hitChanceMod = 0;
+        public virtual int HitChanceMod { get => _hitChanceMod; protected set => _hitChanceMod = value; }
 
-        private int _hitChanceMod = 0; 
-        public virtual int HitChanceMod { get => _hitChanceMod; protected set => _hitChanceMod = value; } 
+        private int _defenceChanceMod = 0;
+        public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; }
+        public virtual Race Races { get => _race; set => _race = value; }
 
-        private int _defenceChanceMod = 0; 
-        public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; } 
-        public virtual Race Races { get => _race; set => _race = value; } 
+        private int _hp = 10;
+        public virtual int HP { get => _hp; protected set => _hp = value; }
 
-        private int _hp = 10; 
-        public virtual int HP { get => _hp; protected set => _hp = value; } 
-
-        private int _defVal = 2; 
-        public virtual int DefVal { get => _defVal; protected set => _defVal = value; } 
-
+        private int _blockValue = 2;
+        public virtual int BlockValue { get => _blockValue; protected set => _blockValue = value; }
+        private int weatherNum = 0;
         
 
+
+        public void WeatherNum(int WeatherNum)
+        {
+            weatherNum = WeatherNum;
+        }
+
+    
         public void WeatherEffects(Weather weatherType)
         {
             if (weatherType == Weather.Sunny)
             {
+                Console.WriteLine("===========");
+                Console.WriteLine("it is sunny");
+                Console.WriteLine("===========");
                 HitChanceMod++;
             }
             if (weatherType == Weather.Rainy)
             {
+                Console.WriteLine("===========");
+                Console.WriteLine("it is Rainy");
+                Console.WriteLine("===========");
                 DamageMod--;
                 HitChanceMod++;
             }
             if (weatherType == Weather.Snowy)
             {
+                Console.WriteLine("===========");
+                Console.WriteLine("it is Snowy");
+                Console.WriteLine("===========");
                 HitChanceMod--;
             }
         }
-//        public Dictionary<Dice, string> MultipleDice()
-//        {
-//            //Dice hitChanceDice;
-//            //hitChanceDice = new Dice(6,2,HitChanceMod);
-//            //Dice defenderChanceDice;
-//            //defenderChanceDice = new Dice(6,2,DefenceChanceMod);
-//            //Dice damageDice;
-//            //damageDice = new Dice(6,2,DamageMod);
-//           // Dice[] multipleDice = { hitChanceDice, defenderChanceDice, damageDice };
-//            //var multipleDiceDicionary = Enumerable.Range(0, multipleDice.Length).ToDictionary(x => multipleDice[x]);
-//           //var multipleDice = new Dictionary<Dice, string>();
-//           // multipleDice.Add(hitChanceDice, "hitChanceDice");
-//           // multipleDice.Add(defenderChanceDice, "defenderChanceDice");
-//           // multipleDice.Add(damageDice, "damageDice");
-//           // return multipleDice;
 
-//;
-//        }
-        //public int[] DiceRollValues(Dictionary<Dice, int> multipleDice)
-        //{
-        //    MultipleDice();
-        //    int hitChance = multipleDice[0]
-        //    int hitChance = multipleDice[0].roll();
-        //    Console.WriteLine($"hit chance is: {hitChance}");
-        //    int defenderChance = multipleDice[1].roll();
-        //    Console.WriteLine($"defender chance is: {defenderChance}");
-        //    int DMG = multipleDice[2].roll();
-
-        //    int[] diceRollValues = { hitChance, defenderChance, DMG };
-        //    return diceRollValues;
-           
-        //}
-        
         public int CreateHitChanceDice()
-        {  
-             Dice hitChanceDice;
-             hitChanceDice = new Dice(6, 2, HitChanceMod);
-             int hitChance = hitChanceDice.roll();   
-             return hitChance; 
+        {
+            Dice hitChanceDice;
+            hitChanceDice = new Dice(6, 2, HitChanceMod);
+            Console.WriteLine($"Rolling {this.Name}'s HitChanceDice {hitChanceDice._scalar} times");
+            int hitChance = hitChanceDice.roll();
+            return hitChance;
         }
         public int CreateDefendChanceDice()
         {
             Dice defendChanceDice;
-            defendChanceDice = new Dice(6, 2, HitChanceMod);
+            defendChanceDice = new Dice(6, 2, DefenceChanceMod);
+            Console.WriteLine($"Rolling {this.Name}'s defendChanceDice {defendChanceDice._scalar} times");
             int defendChance = defendChanceDice.roll();
             return defendChance;
         }
         public int CreateDamageDice()
         {
-            Dice damageChanceDice;
-            damageChanceDice = new Dice(6, 2, HitChanceMod);
-            int damage = damageChanceDice.roll();
+            Dice damageDice;
+            damageDice = new Dice(6, 2, DamageMod);
+            Console.WriteLine($"Rolling {this.Name}'s DamageDice {damageDice._scalar} times");
+            int damage = damageDice.roll();
             return damage;
+        }
+        public bool isDead()
+        {
+            if (HP >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public virtual void Attack(Character defender)
         {
-            
-            
-            defender.Defend(this);
+
+            Weather WeatherEnum = (Weather)WeatherNum; 
+            WeatherEffects(WeatherEnum);
+            int hitChance = CreateHitChanceDice();
+            defender.Defend(this, hitChance );
         }
-        public virtual void Defend(Character attacker)
+        public virtual void Defend(Character attacker, int hitChance)
         {
-
-
-
-            int hitChance =  CreateHitChanceDice();     
             int defenderChance = CreateDefendChanceDice();
-     
-            int damage = CreateDamageDice();
-            Console.WriteLine("");
-            Console.WriteLine("damage chance is active");
-
             if (hitChance > defenderChance)
             {
                 Console.WriteLine($"hit is succesful");
-
-                if (damage <= DefVal)
-                {
-                    return;
-                }
-                Console.WriteLine($"damage is: {damage} DefenceValue is:{DefVal}");
-                HP -= (damage - DefVal);
-                Console.WriteLine($"{this.Name} HP is now: {this.HP}");
-
+                int damage = CreateDamageDice();
+                UnitDefendLogic(damage);
             }
+            else
+            {
+                Console.WriteLine($"{attacker.Name} missed");
+            }
+        }
+
+        public virtual void UnitDefendLogic(int damage)
+        {
+            if (damage <= BlockValue)
+            {
+                Console.WriteLine($"{damage} damage to {this.Name} was blocked by {this.Name} BlockValue of:{BlockValue}");
+                return;
+            }
+            HP -= (damage - BlockValue);
+            Console.WriteLine($"damage is: {damage} BlockValue is:{BlockValue}");
+            Console.WriteLine($"damage is: {damage * BlockValue}");
+            Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
 
 
@@ -352,7 +387,7 @@ namespace Berzekers
     {
 
         private int _meleeMulti = 2;
-
+        
         public MeleeUnit(Race race)
         {
 
@@ -361,47 +396,41 @@ namespace Berzekers
 
         public virtual int MeleeMulti { get => _meleeMulti; protected set => _meleeMulti = value; }
 
-        public override void Defend(Character attacker)
+        public override void UnitDefendLogic(int damage)
         {
-
-            int hitChance = CreateHitChanceDice();
-            int defenderChance = CreateDefendChanceDice();
-            int damage = CreateDamageDice();
-            
-
-
-            if (damage * MeleeMulti <= DefVal)
+            if (damage * MeleeMulti <= BlockValue)
             {
+
+                Console.WriteLine($"{damage} Damage * {MeleeMulti} BlockValue  was blocked by BlockValue of:{BlockValue}");
                 return;
             }
-            HP -= ((damage * MeleeMulti) - DefVal);
+            HP -= ((damage * MeleeMulti) - BlockValue);
+            Console.WriteLine($"{damage} Damage * {MeleeMulti} MeleeMulti is {damage * MeleeMulti}");
+            Console.WriteLine($"damage is: {damage * MeleeMulti} BlockValue is:{BlockValue}");
+            Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
     }
     internal abstract class ChonkerUnit : Character // can defend by a multiplier
     {
-        private int _defMulti = 2;
+        private int _DefenceMulti = 2;
 
         public ChonkerUnit(Race race)
         {
         }
 
-        public virtual int DefMulti { get => _defMulti; protected set => _defMulti = value; }
+        public virtual int DefenceMulti { get => _DefenceMulti; protected set => _DefenceMulti = value; }
 
-        public override void Defend(Character attacker)
+
+        public override void UnitDefendLogic(int damage)
         {
-            Console.WriteLine("hitDice throw");
-            int hitChance = CreateHitChanceDice();
-            Console.WriteLine("DefendDice throw");
-            int defenderChance = this.CreateDefendChanceDice();
-            int damage = CreateDamageDice();
-            
-            
-
-            if (damage <= DefVal * DefMulti)
+            if (damage <= BlockValue * DefenceMulti)
             {
+                Console.WriteLine($"{damage} Damage  to {this.Name}  was blocked by {this.Name} BlockValue of:{BlockValue} * DefenceMulti of {DefenceMulti}");
                 return;
             }
-            HP -= (damage - (DefVal * DefMulti));
+            HP -= (damage - (BlockValue * DefenceMulti));
+            Console.WriteLine($"damage is: {damage} - (BlockValue {BlockValue} * DefenceMulti {DefenceMulti})");
+            Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
 
     }
@@ -416,30 +445,24 @@ namespace Berzekers
 
         public virtual int ProjCount { get => _projectileCount; protected set => _projectileCount = value; }
 
-        //public override void Defend(Character attacker, Dice hitChanceDice, Dice damageDice)
-        //{
 
-        //    Dice defenderChanceDice;
-        //    defenderChanceDice = new Dice();
-        //    defenderChanceDice._die = 6;
-        //    defenderChanceDice._scalar = 2;
-        //    defenderChanceDice._mod = DefenceChanceMod;
-        //    int hitChance = hitChanceDice.roll();
-        //    Console.WriteLine($"hit chance is: {hitChance}");
-        //    int defenderChance = defenderChanceDice.roll();
-        //    Console.WriteLine($"defender chance is: {defenderChance}");
-        //    while (ProjCount > 0)
-        //    {
-        //        int DMG = damageDice.roll();
+        public override void UnitDefendLogic(int damage)
+        {
+            // while (ProjCount > 0)
+            for (int i = 0; i <= ProjCount; i++)
+            {
+                if (damage <= BlockValue)
+                {
+                    Console.WriteLine($"{damage} Damage to {this.Name} was blocked by {this.Name} BlockValue of:{BlockValue}");
+                    return;
+                }
+                HP -= (damage - BlockValue);
+                Console.WriteLine($"Damaged {this.Name} by {damage} Damage - {BlockValue} BlockValue ");
+                Console.WriteLine($"{this.Name} HP is now: {this.HP}");
+                Console.WriteLine($"ProjCount {i}");
+            }
 
-        //        if (DMG <= DefVal)
-        //        {
-        //            return;
-        //        }
-        //        HP -= (DMG - DefVal);
-        //        ProjCount--;
-        //    }
-        //}
+        }
     }
 
     internal class NaziMeleeUnit : MeleeUnit
@@ -462,7 +485,7 @@ namespace Berzekers
             DamageMod++;
         }
         public override string Name { get => "NaziChonkerUnit"; protected set => base.Name = value; }
-        public override int DefMulti { get => base.DefMulti + 1; protected set => base.DefMulti = value; }
+        public override int DefenceMulti { get => base.DefenceMulti + 1; protected set => base.DefenceMulti = value; }
     }
     internal class NaziRangedUnit : RangedUnit
     {
@@ -492,7 +515,7 @@ namespace Berzekers
             HP++;
         }
         public override string Name { get => "SlavChonkerUnit"; protected set => base.Name = value; }
-        public override int DefMulti { get => base.DefMulti + 2; protected set => base.DefMulti = value; }
+        public override int DefenceMulti { get => base.DefenceMulti + 2; protected set => base.DefenceMulti = value; }
     }
     internal class SlavRangedUnit : RangedUnit
     {
@@ -510,7 +533,7 @@ namespace Berzekers
         public PersianMeleeUnit(Race race) : base(race)
         {
             race = Race.Persians;
-            DefVal++;
+            BlockValue++;
         }
         public override int MeleeMulti { get => base.MeleeMulti - 1; protected set => base.MeleeMulti = value; }
     }
@@ -520,16 +543,16 @@ namespace Berzekers
         public PersianChonkerUnit(Race race) : base(race)
         {
             race = Race.Persians;
-            DefVal++;
+            BlockValue++;
         }
-        public override int DefMulti { get => base.DefMulti - 1; protected set => base.DefMulti = value; }
+        public override int DefenceMulti { get => base.DefenceMulti - 1; protected set => base.DefenceMulti = value; }
     }
     internal class PersianRangedUnit : RangedUnit
     {
         public PersianRangedUnit(Race race) : base(race)
         {
             race = Race.Persians;
-            DefVal++;
+            BlockValue++;
         }
         public override string Name { get => "PersianRangedUnit"; protected set => base.Name = value; }
         public override int ProjCount { get => base.ProjCount + 1; protected set => base.ProjCount = value; }
