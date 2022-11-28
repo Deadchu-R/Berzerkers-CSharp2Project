@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using static Character;
 using static System.Net.Mime.MediaTypeNames;
 
 
@@ -16,64 +17,143 @@ namespace Berzekers
 {
 
 
-    public class GameManager // where the game will run
+
+    }
+
+  class Actor 
+{
+    private Race _race;
+    private int _recources = 0;
+    public virtual int Recources { get => _recources; protected set => _recources = value; }
+
+    public Actor(Race race)
+    {
+        _race = race;
+    }
+
+    public void ActorWon(int enemyRecources)
+    {
+        Console.WriteLine($"stole {enemyRecources} from enemy");
+    }
+    public List<Character> CreateTeam(int teamSize)
+    {
+             List<Character> unitTeam = new List<Character>();
+             Random randomRecources = new Random();
+             _recources = randomRecources.Next(500);
+        if (_race == Race.Nazis)
+        {
+
+            NaziMeleeUnit NaziMelee = new NaziMeleeUnit(Character.Race.Nazis);
+            ChonkerUnit NaziChonker = new NaziChonkerUnit(Character.Race.Nazis);
+            RangedUnit NaziRanged = new NaziRangedUnit(Character.Race.Nazis);
+            for (int i = 1; i < teamSize; i++)
+            {
+                Random randomUnit = new Random();
+                int unit = randomUnit.Next(0,3);
+                if (unit == 0) unitTeam.Add(NaziMelee);
+                if (unit == 1) unitTeam.Add(NaziChonker);
+                if (unit == 2) unitTeam.Add(NaziRanged);
+               
+            }
+            
+        }
+        if (_race == Race.Slavs)
+        {
+            RangedUnit SlavRanged = new SlavRangedUnit(Character.Race.Slavs);
+            SlavMeleeUnit SlavMelee = new SlavMeleeUnit(Character.Race.Slavs);
+            ChonkerUnit SlavChonker = new SlavChonkerUnit(Character.Race.Slavs);
+            for (int i = 1; i < teamSize; i++)
+            {
+                Random randomUnit = new Random();
+                int unit = randomUnit.Next(0, 2);
+                if (unit == 0) unitTeam.Add(SlavMelee);
+                if (unit == 1) unitTeam.Add(SlavChonker);
+                if (unit == 2) unitTeam.Add(SlavRanged);
+               
+            }
+
+        }
+        if (_race == Race.Persians)
+        {
+            PersianMeleeUnit PersianMelee = new PersianMeleeUnit(Character.Race.Persians);
+            ChonkerUnit PersianChonker = new PersianChonkerUnit(Character.Race.Persians);
+            RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
+            for (int i = 1; i < teamSize; i++)
+            {
+                Random randomUnit = new Random();
+                int unit = randomUnit.Next(0, 2);
+                if (unit == 0) unitTeam.Add(PersianMelee);
+                if (unit == 1) unitTeam.Add(PersianChonker);
+                if (unit == 2) unitTeam.Add(PersianRanged);
+               
+            }
+        }
+        foreach (Character unit in unitTeam)
+        {
+            Console.WriteLine(unit.Name);
+        }
+        return unitTeam;
+    }  
+}
+public class GameManager // where the game will run
     {
         public static void Main(string[] args)
         {
+         
             GameManager gameManager = new GameManager();
-            // gameManager.GameLoop();
             gameManager.UnitsCombat();
-        }
-        
-        public void GameLoop()
-        {
-
-            while (true)
-            {
-
-                Console.WriteLine("starting game...");
-                UnitsCombat();
-                //if (TeamLost())
-                //{
-                //    Console.WriteLine("closing game...");
-                //    break;
-                //}
-            }
-
         }
 
         public void UnitsCombat() // a method for Units Combat Algo
         {
-            Units();
-            List<Character> unitTeam1 = new List<Character>();
-            unitTeam1.Add(new NaziMeleeUnit(Character.Race.Nazis));
-            unitTeam1.Add(new SlavChonkerUnit(Character.Race.Slavs));
-            unitTeam1.Add(new PersianRangedUnit(Character.Race.Persians));
-          
+        
+           Actor Actor1 = new Actor(Race.Nazis);
+           List<Character> unitTeam1 = Actor1.CreateTeam(3);
+          Console.ReadLine();
+            Actor Actor2 = new Actor(Race.Slavs);
+            List<Character> unitTeam2 = Actor2.CreateTeam(3);
+            Console.ReadLine();
 
-            List<Character> unitTeam2 = new List<Character>();
-            unitTeam2.Add(new NaziChonkerUnit(Character.Race.Nazis));
-            unitTeam2.Add(new SlavRangedUnit(Character.Race.Slavs));
-            unitTeam2.Add(new PersianMeleeUnit(Character.Race.Persians));
-            
-            
-            int turns = 3;
-          
+
+            void RandomWeather(int turns)
+            {
+                
+                if (turns % 3 == 0)
+                {
+                    Random randomWeatherChance = new Random();
+                    int weatherChance = randomWeatherChance.Next(0, 3);
+                    Console.WriteLine($"weatherChance is {weatherChance}");
+                    if (weatherChance == 2)
+                    {
+                        Console.WriteLine("]]]]]]]]]]]]]]]]]");
+                        Console.WriteLine("Switching Weather");
+                        Console.WriteLine("]]]]]]]]]]]]]]]]]");
+                        Random randomWeatherNum = new Random();
+                        int weatherNum = randomWeatherNum.Next(0, 3);
+                        foreach (Character c in unitTeam1)
+                        {
+                            c.SwitchWeather(weatherNum);
+                        }
+                        foreach (Character c in unitTeam2)
+                        {
+                            c.SwitchWeather(weatherNum);
+                        }
+
+                        if (unitTeam1.Count >= 0) unitTeam1[0].PrintWeather(weatherNum);
+                        else if (unitTeam2.Count >= 0) unitTeam2[0].PrintWeather(weatherNum);
+
+                    }
+                }
+            }
+            int turns = 0;
+
             bool bothTeamsAlive = true;
             while (bothTeamsAlive)
             {
-                Random randomWeatherTurns = new Random();     
-                int WeatherTurns = randomWeatherTurns.Next(1, turns);
-                if (turns / WeatherTurns == 1)
-                {
-                  Random randomWeatherNum = new Random();
-                  int WeatherNum = randomWeatherTurns.Next(0, 3);
-                }
-
-
                 bool team1Turn = true;
                 if (team1Turn == true) // team1 turn
                 {
+                    RandomWeather(turns);
                     Console.WriteLine("-----------------");
                     Console.WriteLine("it is Team1 Turn:");
                     Console.WriteLine("-----------------");
@@ -90,9 +170,10 @@ namespace Berzekers
                     {
                         Console.WriteLine($"UnitTeam2: {unitTeam2[randomDefender].Name} is dead");
                         unitTeam2.Remove(unitTeam2[randomDefender]);
-                            
+
                         if (unitTeam2.Count <= 0)
                         {
+                            Actor1.ActorWon(Actor2.Recources);
                             Console.WriteLine("team1 won");
                             bothTeamsAlive = false;
                             break;
@@ -102,6 +183,8 @@ namespace Berzekers
                             Console.Write($"{unitTeam2[i].Name}is still alive. ");
                         }
                         turns++;
+                   
+
                     }
                     Console.WriteLine($"press anything to continue ");
                     Console.ReadLine();
@@ -110,6 +193,7 @@ namespace Berzekers
                 }
                 if (team1Turn == false) // team 2 turn
                 {
+                    RandomWeather(turns);
                     Console.WriteLine("-----------------");
                     Console.WriteLine("it is Team2 Turn:");
                     Console.WriteLine("-----------------");
@@ -117,7 +201,7 @@ namespace Berzekers
                     int randomAttacker = rndAttacker.Next(0, unitTeam2.Count);
                     Random rndDefender = new Random();
                     int randomDefender = rndAttacker.Next(0, unitTeam1.Count);
-                   
+
                     Console.WriteLine($"Team2: {unitTeam2[randomAttacker].Name} is attacking Team1:{unitTeam1[randomDefender].Name} ");
                     unitTeam2[randomAttacker].Attack(unitTeam1[randomDefender]);
                     Console.WriteLine($"press anything to Finish Team2 Turn");
@@ -130,22 +214,23 @@ namespace Berzekers
                         {
                             Console.WriteLine($"UnitTeam1: {unitTeam1[randomDefender].Name} is dead");
                             unitTeam1.Remove(unitTeam1[randomDefender]);
-                           
+
                             if (unitTeam1.Count <= 0)
                             {
                                 Console.WriteLine("team2 won");
-                                bothTeamsAlive = false;
+                                Actor2.ActorWon(Actor1.Recources);
+                            bothTeamsAlive = false;
                                 break;
                             }
                             for (int i = 0; i < unitTeam1.Count; i++)
                             {
-                             Console.Write(unitTeam1[i].Name);
+                                Console.Write(unitTeam1[i].Name);
                             }
                         }
                         turns++;
 
                     }
-                 
+
                     Console.WriteLine($"press anything to continue ");
                     Console.ReadLine();
                     Console.Clear();
@@ -155,18 +240,7 @@ namespace Berzekers
 
             }
         }
-        public void Units() // method to instanciate unit types
-        {
-            NaziMeleeUnit NaziMelee = new NaziMeleeUnit(Character.Race.Nazis);
-            SlavMeleeUnit SlavMelee = new SlavMeleeUnit(Character.Race.Slavs);
-            PersianMeleeUnit PersianMelee = new PersianMeleeUnit(Character.Race.Persians);
-            ChonkerUnit NaziChonker = new NaziChonkerUnit(Character.Race.Nazis);
-            ChonkerUnit SlavChonker = new SlavChonkerUnit(Character.Race.Slavs);
-            ChonkerUnit PersianChonker = new PersianChonkerUnit(Character.Race.Persians);
-            RangedUnit NaziRanged = new NaziRangedUnit(Character.Race.Nazis);
-            RangedUnit SlavRanged = new SlavRangedUnit(Character.Race.Slavs);
-            RangedUnit PersianRanged = new PersianRangedUnit(Character.Race.Persians);
-        }
+
 
         public bool TeamLost(int HP)
         {
@@ -206,10 +280,6 @@ namespace Berzekers
                 if (i == 1) Console.Write($",2nd Roll Value:{cubeVal}");
                 if (i == 2) Console.Write($",3rd Roll Value:{cubeVal}");
                 if (i >= 3) Console.Write($",{cubeNam}th Roll Value: {cubeVal} ");
-                //if (i < scalar)
-                //{
-                //    Console.WriteLine($"");
-                //}
                 value += cubeVal;
             }
             int moddedValue = value + mod;
@@ -249,13 +319,12 @@ namespace Berzekers
     {
 
         public enum Weather { Sunny, Rainy, Snowy }
-       
+
         private Race _race;
         // props and fields to set values 
         private string _name = "John Doe";
         public virtual string Name { get => _name; protected set => _name = value; }
-        //private int _weatherNum = 0;
-        //public virtual int WeatherNum { get => _weatherNum; protected set => WeatherNum = value; }
+
         private int _carryingCapacity = 100;
         public virtual int CarryingCapacity { get => _carryingCapacity; protected set => _carryingCapacity = value; }
         private int _damageMod = 0;
@@ -273,39 +342,59 @@ namespace Berzekers
 
         private int _blockValue = 2;
         public virtual int BlockValue { get => _blockValue; protected set => _blockValue = value; }
-        private int weatherNum = 0;
-        
 
-
-        public void WeatherNum(int WeatherNum)
+        public void SwitchWeather(int weatherNum)
         {
-            weatherNum = WeatherNum;
+            Weather weatherEnum = (Weather)weatherNum;
+            WeatherEffects(weatherEnum); 
         }
 
-    
+
+
         public void WeatherEffects(Weather weatherType)
         {
+            if (weatherType == Weather.Sunny)
+            {
+                HitChanceMod++;
+            }
+            if (weatherType == Weather.Rainy)
+            {
+                DamageMod--;
+                HitChanceMod++;
+            }
+            if (weatherType == Weather.Snowy)
+            {
+                HitChanceMod--;
+            }
+        }
+        public void PrintWeather(int weatherNum)
+        {
+            Weather weatherType = (Weather)weatherNum;
+            
             if (weatherType == Weather.Sunny)
             {
                 Console.WriteLine("===========");
                 Console.WriteLine("it is sunny");
                 Console.WriteLine("===========");
-                HitChanceMod++;
+                Console.WriteLine($"Weather Changed HitChanceMod Changed to: {HitChanceMod}");
             }
             if (weatherType == Weather.Rainy)
             {
                 Console.WriteLine("===========");
                 Console.WriteLine("it is Rainy");
                 Console.WriteLine("===========");
-                DamageMod--;
-                HitChanceMod++;
+                Console.WriteLine($"Weather Changed HitChanceMod Changed to: {HitChanceMod}");
+                Console.WriteLine($"Weather Changed DamageMod Changed to: {DamageMod}");
+
+
             }
             if (weatherType == Weather.Snowy)
             {
                 Console.WriteLine("===========");
                 Console.WriteLine("it is Snowy");
                 Console.WriteLine("===========");
-                HitChanceMod--;
+                Console.WriteLine($"Weather Changed HitChanceMod Changed to: {HitChanceMod}");
+
             }
         }
 
@@ -335,7 +424,7 @@ namespace Berzekers
         }
         public bool isDead()
         {
-            if (HP >= 0)
+            if (HP <= 0)
             {
                 return true;
             }
@@ -347,10 +436,8 @@ namespace Berzekers
         public virtual void Attack(Character defender)
         {
 
-            Weather WeatherEnum = (Weather)WeatherNum; 
-            WeatherEffects(WeatherEnum);
             int hitChance = CreateHitChanceDice();
-            defender.Defend(this, hitChance );
+            defender.Defend(this, hitChance);
         }
         public virtual void Defend(Character attacker, int hitChance)
         {
@@ -359,7 +446,7 @@ namespace Berzekers
             {
                 Console.WriteLine($"hit is succesful");
                 int damage = CreateDamageDice();
-                UnitDefendLogic(damage);
+                UnitDefendLogic(damage, attacker);
             }
             else
             {
@@ -367,16 +454,16 @@ namespace Berzekers
             }
         }
 
-        public virtual void UnitDefendLogic(int damage)
+        public virtual void UnitDefendLogic(int damage, Character attcker)
         {
             if (damage <= BlockValue)
             {
-                Console.WriteLine($"{damage} damage to {this.Name} was blocked by {this.Name} BlockValue of:{BlockValue}");
+                Console.WriteLine($"{damage} damage to {this.Name} was blocked by {Name} BlockValue of:{BlockValue}");
                 return;
             }
             HP -= (damage - BlockValue);
             Console.WriteLine($"damage is: {damage} BlockValue is:{BlockValue}");
-            Console.WriteLine($"damage is: {damage * BlockValue}");
+            Console.WriteLine($"damage is: {damage - BlockValue}");
             Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
 
@@ -386,8 +473,9 @@ namespace Berzekers
     internal abstract class MeleeUnit : Character // can attack by a multiplier
     {
 
-        private int _meleeMulti = 2;
-        
+        private int _meleeMulti = 2
+        ;
+
         public MeleeUnit(Race race)
         {
 
@@ -396,17 +484,18 @@ namespace Berzekers
 
         public virtual int MeleeMulti { get => _meleeMulti; protected set => _meleeMulti = value; }
 
-        public override void UnitDefendLogic(int damage)
+        public override void UnitDefendLogic(int damage, Character attacker)
         {
-            if (damage * MeleeMulti <= BlockValue)
+            if (damage + MeleeMulti <= BlockValue)
             {
 
-                Console.WriteLine($"{damage} Damage * {MeleeMulti} BlockValue  was blocked by BlockValue of:{BlockValue}");
+                Console.WriteLine($"{damage} Damage + {MeleeMulti} BlockValue  was blocked by BlockValue of:{BlockValue}");
                 return;
             }
-            HP -= ((damage * MeleeMulti) - BlockValue);
-            Console.WriteLine($"{damage} Damage * {MeleeMulti} MeleeMulti is {damage * MeleeMulti}");
-            Console.WriteLine($"damage is: {damage * MeleeMulti} BlockValue is:{BlockValue}");
+            HP -= ((damage + MeleeMulti) - BlockValue);
+            Console.WriteLine($"{damage} Damage + {MeleeMulti} MeleeMulti is {damage * MeleeMulti}");
+            Console.WriteLine($"damage is: {damage +
+                MeleeMulti} BlockValue is:{BlockValue}");
             Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
     }
@@ -421,14 +510,14 @@ namespace Berzekers
         public virtual int DefenceMulti { get => _DefenceMulti; protected set => _DefenceMulti = value; }
 
 
-        public override void UnitDefendLogic(int damage)
+        public override void UnitDefendLogic(int damage, Character attacker)
         {
-            if (damage <= BlockValue * DefenceMulti)
+            if (damage <= BlockValue + DefenceMulti)
             {
-                Console.WriteLine($"{damage} Damage  to {this.Name}  was blocked by {this.Name} BlockValue of:{BlockValue} * DefenceMulti of {DefenceMulti}");
+                Console.WriteLine($"{damage} Damage  to {Name}  was blocked by {attacker.Name} BlockValue of:{BlockValue} + DefenceMulti of {DefenceMulti}");
                 return;
             }
-            HP -= (damage - (BlockValue * DefenceMulti));
+            HP -= (damage - (BlockValue + DefenceMulti));
             Console.WriteLine($"damage is: {damage} - (BlockValue {BlockValue} * DefenceMulti {DefenceMulti})");
             Console.WriteLine($"{this.Name} HP is now: {this.HP}");
         }
@@ -443,13 +532,13 @@ namespace Berzekers
         {
         }
 
-        public virtual int ProjCount { get => _projectileCount; protected set => _projectileCount = value; }
+        public virtual int ProjectileCount { get => _projectileCount; protected set => _projectileCount = value; }
 
 
-        public override void UnitDefendLogic(int damage)
+        public override void UnitDefendLogic(int damage, Character attacker)
         {
-            // while (ProjCount > 0)
-            for (int i = 0; i <= ProjCount; i++)
+           
+            for (int i = ProjectileCount; i > 0; i--)
             {
                 if (damage <= BlockValue)
                 {
@@ -495,7 +584,7 @@ namespace Berzekers
             DamageMod++;
         }
         public override string Name { get => "NaziRangedUnit"; protected set => base.Name = value; }
-        public override int ProjCount { get => base.ProjCount + 4; protected set => base.ProjCount = value; }
+        public override int ProjectileCount { get => base.ProjectileCount + 1; protected set => base.ProjectileCount = value; }
     }
     internal class SlavMeleeUnit : MeleeUnit
     {
@@ -525,7 +614,7 @@ namespace Berzekers
             HP++;
         }
         public override string Name { get => "SlavRangedUnit"; protected set => base.Name = value; }
-        public override int ProjCount { get => base.ProjCount - 1; protected set => base.ProjCount = value; }
+        public override int ProjectileCount { get => base.ProjectileCount - 1; protected set => base.ProjectileCount = value; }
     }
     internal class PersianMeleeUnit : MeleeUnit
     {
@@ -555,9 +644,8 @@ namespace Berzekers
             BlockValue++;
         }
         public override string Name { get => "PersianRangedUnit"; protected set => base.Name = value; }
-        public override int ProjCount { get => base.ProjCount + 1; protected set => base.ProjCount = value; }
+        public override int ProjectileCount { get => base.ProjectileCount + 1; protected set => base.ProjectileCount = value; }
     }
 
 
 
-}
