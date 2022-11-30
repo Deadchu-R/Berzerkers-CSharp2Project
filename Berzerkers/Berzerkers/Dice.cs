@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Berzerkers
 {
-    struct Dice
+    class Dice : IRandomProvider
     {
         public uint _die; // how many dice
         public uint _scalar = 0; // how many times die will roll
@@ -29,6 +29,7 @@ namespace Berzerkers
             Random rnd = new Random();
             int value = 0;
             int cubeNam = 0;
+            Console.WriteLine($" Dice {scalar} times");
             for (int i = 0; i < scalar; i++)
             {
                 cubeNam++;
@@ -71,5 +72,8 @@ namespace Berzerkers
             return a * 100 + b * 10 + c;
         }
 
+        public int ProvideRandom() => Roll();
+     
     }
+
 }

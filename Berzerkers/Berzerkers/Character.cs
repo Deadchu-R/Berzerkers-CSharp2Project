@@ -23,6 +23,10 @@ namespace Berzerkers
 
         private int _hitChanceMod = 0;
         public virtual int HitChanceMod { get => _hitChanceMod; protected set => _hitChanceMod = value; }
+        private uint _scalar = 2;
+        public virtual uint Scalar { get => _scalar; protected set => _scalar = value; }
+        private uint _die = 6;
+        public virtual uint Die { get => _die; protected set => _die = value; }
 
         private int _defenceChanceMod = 0;
         public virtual int DefenceChanceMod { get => _defenceChanceMod; protected set => _defenceChanceMod = value; }
@@ -91,26 +95,26 @@ namespace Berzerkers
 
         public int CreateHitChanceDice()
         {
-            Dice hitChanceDice;
-            hitChanceDice = new Dice(6, 2, HitChanceMod);
-            Console.WriteLine($"Rolling {this.Name}'s HitChanceDice {hitChanceDice._scalar} times");
-            int hitChance = hitChanceDice.Roll();
+            Console.Write($"Rolling {this.Name}'s HitChanceDice");
+            IRandomProvider hitChanceDice;
+            hitChanceDice = new Dice(Die, Scalar, HitChanceMod);
+            int hitChance = hitChanceDice.ProvideRandom();
             return hitChance;
         }
         public int CreateDefendChanceDice()
         {
-            Dice defendChanceDice;
-            defendChanceDice = new Dice(6, 2, DefenceChanceMod);
-            Console.WriteLine($"Rolling {this.Name}'s defendChanceDice {defendChanceDice._scalar} times");
-            int defendChance = defendChanceDice.Roll();
+            Console.Write($"Rolling {this.Name}'s DefendChanceDice");
+            IRandomProvider defendChanceDice;
+            defendChanceDice = new Dice(Die, Scalar, DefenceChanceMod);
+            int defendChance = defendChanceDice.ProvideRandom();
             return defendChance;
         }
         public int CreateDamageDice()
         {
-            Dice damageDice;
-            damageDice = new Dice(6, 2, DamageMod);
-            Console.WriteLine($"Rolling {this.Name}'s DamageDice {damageDice._scalar} times");
-            int damage = damageDice.Roll();
+            Console.Write($"Rolling {this.Name}'s DamageDice");
+            IRandomProvider damageDice;
+            damageDice = new Dice(Die, Scalar, DamageMod);
+            int damage = damageDice.ProvideRandom();
             return damage;
         }
         public bool isDead()
@@ -126,7 +130,6 @@ namespace Berzerkers
         }
         public virtual void Attack(Character defender)
         {
-
             int hitChance = CreateHitChanceDice();
             defender.Defend(this, hitChance);
         }
