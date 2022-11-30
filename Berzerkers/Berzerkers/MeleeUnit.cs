@@ -11,7 +11,15 @@ namespace Berzerkers
 
         private int _meleeMulti = 2
         ;
-
+        public int UseBag()
+        {
+            Console.Write($"{this.Name} Drawing a NumberCard from the bag");
+            IRandomProvider bag;
+            bag = new Bag(10, 2, 50); // yes, it is hard codded
+            int NumberCard = bag.ProvideRandom();
+            Console.WriteLine($"NumberCard:{NumberCard}");
+            return NumberCard;
+        }
         public MeleeUnit(Race race)
         {
 
@@ -22,6 +30,7 @@ namespace Berzerkers
 
         public override void UnitDefendLogic(int damage, Character attacker)
         {
+           damage = UseBag();
             if (damage + MeleeMulti <= BlockValue)
             {
 

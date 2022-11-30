@@ -11,6 +11,7 @@ namespace Berzerkers
         public int _bagSize;
         public int _minNumber;
         public int _maxNumber;
+        List<int> numberCards = new List<int>();
 
         public Bag(int bagSize, int minNumber, int maxNumber)
         {
@@ -24,19 +25,21 @@ namespace Berzerkers
             int bagSize = this._bagSize;
             int minNumber = this._minNumber;
             int maxNumber = this._maxNumber;
-
-            List<int> numberCards = new List<int>(bagSize);
+            int cardValue;
             Random randomCards = new Random();
             if (numberCards.Count == 0)
             {
-                for (int i = 0; i < _bagSize; i++)
+                Console.WriteLine("bag is out of cards, ReShuffling...");
+                for (int i = 0; i < bagSize; i++)
                 {
-                    numberCards[i] = randomCards.Next(_minNumber, _maxNumber);
+                    numberCards.Add(randomCards.Next(minNumber, maxNumber)); 
                 }
             }
-                int Card = randomCards.Next(numberCards.Count);
-                numberCards.Remove(Card);
-                return Card;
+                int card = randomCards.Next(numberCards.Count);
+                cardValue = numberCards[card];
+                numberCards.Remove(card);
+            Console.WriteLine($"end list count:{numberCards.Count}");
+            return cardValue;
         }
 
         public int ProvideRandom() => DrawNumber();

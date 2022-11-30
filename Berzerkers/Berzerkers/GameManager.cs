@@ -14,6 +14,7 @@ namespace Berzerkers
 
             GameManager gameManager = new GameManager();
             gameManager.UnitsCombat();
+    
         }
 
         public void UnitsCombat() // a method for Units Combat Algo

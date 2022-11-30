@@ -93,7 +93,7 @@ namespace Berzerkers
             }
         }
 
-        public int CreateHitChanceDice()
+        private int CreateHitChanceDice()
         {
             Console.Write($"Rolling {this.Name}'s HitChanceDice");
             IRandomProvider hitChanceDice;
@@ -101,7 +101,8 @@ namespace Berzerkers
             int hitChance = hitChanceDice.ProvideRandom();
             return hitChance;
         }
-        public int CreateDefendChanceDice()
+
+        private int CreateDefendChanceDice()
         {
             Console.Write($"Rolling {this.Name}'s DefendChanceDice");
             IRandomProvider defendChanceDice;
@@ -109,7 +110,7 @@ namespace Berzerkers
             int defendChance = defendChanceDice.ProvideRandom();
             return defendChance;
         }
-        public int CreateDamageDice()
+        private int CreateDamageDice()
         {
             Console.Write($"Rolling {this.Name}'s DamageDice");
             IRandomProvider damageDice;

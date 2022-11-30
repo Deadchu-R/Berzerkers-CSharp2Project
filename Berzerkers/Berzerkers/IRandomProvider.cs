@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Berzerkers
 {
-    internal interface IRandomProvider
-    {
+       interface IRandomProvider
+       {
         public int ProvideRandom();
 
+       
     }
 }
